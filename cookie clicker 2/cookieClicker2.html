@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker 2</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: gray;
+        }
+
+        #cookie {
+            font-size: 150px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        #cookie:active {
+            transform: scale(0.9);
+        }
+
+        @keyframes cookie-bounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        #biscuits {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        input {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #shop {
+            margin-top: 20px;
+            border: 1px solid #000;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .shop-item {
+            margin-bottom: 10px;
+        }
+
+        #nonna-video {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h2>Cookie Clicker 2</h2>
+
+    <h1 id="bakery-name">Nome della Pasticceria</h1>
+
+    <input type="text" id="bakery-input" placeholder="Inserisci il nome della tua pasticceria">
+    <button onclick="changeBakeryName()">Cambia nome</button>
+
+    <div>
+        <span id="cookie">🍪</span>
+    </div>
+
+    <div id="biscuits">Biscotti: 0</div>
+
+    <!-- Sezione shop -->
+    <div id="shop">
+        <h3>Shop</h3>
+        <div class="shop-item">
+            <button id="buy-cursor" onclick="buyCursor()">Compra cursore (15 biscotti)</button>
+        </div>
+        <div class="shop-item">
+            <button id="buy-granny" onclick="buyGranny()">Compra nonna (30 biscotti)</button>
+        </div>
+    </div>
+
+    <!-- Video della nonna -->
+    <video id="nonna-video" width="320" height="240" controls>
+        <source src="C:\Users\Pietro\Downloads\Una nonna balla.mp4" type="video/mp4">
+        Il tuo browser non supporta la riproduzione del video.
+    </video>
+</div>
+
+<script>
+    let biscuits = 0;
+    let cursors = 0;
+    let grannies = 0;
+    let cursorCost = 15;
+    let grannyCost = 30;
+
+    // Funzione per cambiare il nome della pasticceria
+    function changeBakeryName() {
+        const bakeryName = document.getElementById('bakery-input').value;
+        document.getElementById('bakery-name').textContent = bakeryName ? bakeryName : 'Nome della Pasticceria';
+    }
+
+    // Funzione per incrementare i biscotti con il click
+    document.getElementById('cookie').addEventListener('click', function() {
+        biscuits++;
+        document.getElementById('biscuits').textContent = "Biscotti: " + biscuits;
+
+        // Animazione del biscotto
+        document.getElementById('cookie').style.animation = "cookie-bounce 0.2s";
+        setTimeout(() => {
+            document.getElementById('cookie').style.animation = "";
+        }, 200);
+    });
+
+    // Funzione per comprare il cursore automatico
+    function buyCursor() {
+        if (biscuits >= cursorCost) {
+            biscuits -= cursorCost;
+            cursors++;
+            document.getElementById('biscuits').textContent = "Biscotti: " + biscuits;
+
+            // Aumenta il costo del cursore del 20%
+            cursorCost = Math.floor(cursorCost * 1.2);
+            document.getElementById('buy-cursor').textContent = "Compra cursore (" + cursorCost + " biscotti)";
+
+            // Aggiunge biscotti automaticamente
+            if (cursors === 1) {
+                setInterval(() => {
+                    biscuits += cursors;
+                    document.getElementById('biscuits').textContent = "Biscotti: " + biscuits;
+                }, 1000);
+            }
+        }
+    }
+
+    // Funzione per comprare una nonna
+    function buyGranny() {
+        if (biscuits >= grannyCost) {
+            biscuits -= grannyCost;
+            grannies++;
+            document.getElementById('biscuits').textContent = "Biscotti: " + biscuits;
+
+            // Aumenta il costo della nonna del 20%
+            grannyCost = Math.floor(grannyCost * 1.2);
+            document.getElementById('buy-granny').textContent = "Compra nonna (" + grannyCost + " biscotti)";
+
+            // Aggiunge biscotti automaticamente dalle nonne
+            if (grannies === 1) {
+                setInterval(() => {
+                    biscuits += grannies * 2;
+                    document.getElementById('biscuits').textContent = "Biscotti: " + biscuits;
+                }, 1000);
+            }
+
+            // Mostra e riproduce il video della nonna
+            const video = document.getElementById('nonna-video');
+            video.style.display = "block";
+            video.play();
+        }
+    }
+</script>
+
+</body>
+</html>
